@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B149B8C62E918C0800DA90CB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B149B8C52E918C0800DA90CB /* Alamofire */; };
+		B149B8D02E91912500DA90CB /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = B149B8CF2E91912500DA90CB /* Swinject */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		B1421DAC2E91834800BC7BE8 /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B149B8C62E918C0800DA90CB /* Alamofire in Frameworks */,
+				B149B8D02E91912500DA90CB /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = Movies;
 			packageProductDependencies = (
+				B149B8C52E918C0800DA90CB /* Alamofire */,
+				B149B8CF2E91912500DA90CB /* Swinject */,
 			);
 			productName = Movies;
 			productReference = B1421DAC2E91834800BC7BE8 /* Movies.app */;
@@ -107,6 +116,10 @@
 			);
 			mainGroup = B1421DA32E91834800BC7BE8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B149B8C42E918C0800DA90CB /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B149B8CE2E91912500DA90CB /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B1421DAD2E91834800BC7BE8 /* Products */;
 			projectDirPath = "";
@@ -200,6 +213,8 @@
 		};
 		B1421DC22E91834900BC7BE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = B1421DAE2E91834800BC7BE8 /* Movies */;
+			baseConfigurationReferenceRelativePath = Resources/AppConfig.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -263,6 +278,8 @@
 		};
 		B1421DC32E91834900BC7BE8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = B1421DAE2E91834800BC7BE8 /* Movies */;
+			baseConfigurationReferenceRelativePath = Resources/AppConfig.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -339,6 +356,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B149B8C42E918C0800DA90CB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		B149B8CE2E91912500DA90CB /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B149B8C52E918C0800DA90CB /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B149B8C42E918C0800DA90CB /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		B149B8CF2E91912500DA90CB /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B149B8CE2E91912500DA90CB /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B1421DA42E91834800BC7BE8 /* Project object */;
 }
