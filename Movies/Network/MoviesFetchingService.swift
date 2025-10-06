@@ -2,6 +2,8 @@ import Foundation
 import Alamofire
 
 protocol MoviesFetchingServiceProtocol {
+    func fetchTrailerURL(id: Int, completion: @escaping (URL?) -> Void)
+    func fetchMovieDetails(id: Int, completion: @escaping (Result<MovieDetailsResponse, Error>) -> Void)
     func fetchMovies(page: Int, sortBy: MoviesSortOption, completion: @escaping (Result<MovieResponse, Error>) -> Void)
     func searchMovies(query: String, page: Int, completion: @escaping (Result<MovieResponse, Error>) -> Void)
     func fetchGenres(completion: @escaping (Result<[Int: String], Error>) -> Void)
@@ -79,6 +81,49 @@ final class MoviesFetchingService: MoviesFetchingServiceProtocol {
                     completion(.success(data))
                 case .failure(let error):
                     completion(.failure(error))
+                }
+            }
+    }
+    
+    func fetchMovieDetails(id: Int, completion: @escaping (Result<MovieDetailsResponse, Error>) -> Void) {
+        let movieURL = APIConstants.movieURL + String(id)
+        let parameters: [String: Any] = [
+            "api_key": apiKey,
+            "language": "en-US"
+        ]
+        
+        AF.request(movieURL, parameters: parameters)
+            .validate()
+            .responseDecodable(of: MovieDetailsResponse.self) { response in
+                switch response.result {
+                case .success(let movieResponse):
+                    completion(.success(movieResponse))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    func fetchTrailerURL(id: Int, completion: @escaping (URL?) -> Void) {
+        let url = APIConstants.movieURL + "\(id)/videos"
+        let parameters: [String: Any] = [
+            "api_key": apiKey,
+            "language": "en-US"
+        ]
+        
+        AF.request(url, parameters: parameters)
+            .validate()
+            .responseDecodable(of: VideosResponse.self) { response in
+                switch response.result {
+                case .success(let videosResponse):
+                    if let trailer = videosResponse.results.first(where: { $0.type == "Trailer" && $0.site == "YouTube" }) {
+                        let trailerURL = URL(string: APIConstants.trailerURLBase + trailer.key)
+                        completion(trailerURL)
+                    } else {
+                        completion(nil)
+                    }
+                case .failure:
+                    completion(nil)
                 }
             }
     }

@@ -83,6 +83,13 @@ final class MoviesListViewController: UIViewController {
         }
     }
     
+    private func showMovieDetails(for movie: Movie) {
+        let detailsVC = DependencyContainer.shared.container.forceResolve(MovieDetailsViewController.self)
+        detailsVC.setMoviePreviewInfo(movie)
+        navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(detailsVC, animated: true)
+    }
+    
     @objc private func refreshData() {
         viewModel.reloadMovies()
     }
@@ -130,6 +137,13 @@ extension MoviesListViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 250
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let movie = viewModel.movies[indexPath.row]
+        showMovieDetails(for: movie)
     }
 }
 
