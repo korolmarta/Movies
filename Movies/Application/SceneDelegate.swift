@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var container = DependencyContainer.shared.container
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let moviesVC = MoviesListViewController(nibName: "MoviesListViewController", bundle: nil)
+        let moviesVC = container.forceResolve(MoviesListViewController.self)
         let navController = UINavigationController(rootViewController: moviesVC)
         
         window.rootViewController = navController
