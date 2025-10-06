@@ -23,6 +23,16 @@ final class DependencyContainer {
             let viewModel = resolver.forceResolve(MoviesListViewModel.self)
             return MoviesListViewController(viewModel: viewModel)
         }
+        
+        container.register(MovieDetailsViewModel.self) { resolver in
+            let service = resolver.forceResolve(MoviesFetchingServiceProtocol.self)
+            return MovieDetailsViewModel(moviesService: service)
+        }
+        
+        container.register(MovieDetailsViewController.self) { resolver in
+            let viewModel = resolver.forceResolve(MovieDetailsViewModel.self)
+            return MovieDetailsViewController(viewModel: viewModel)
+        }
     }
 }
 
