@@ -2,13 +2,12 @@ import Foundation
 
 struct MovieDetails {
     let title: String
-    let country: String?
-    let year: String
+    let meta: String?
     let genres: String
     let rating: String
     let overview: String
     let posterURL: URL?
-    let trailerURL: String?
+    let trailerURL: URL?
 }
 
 struct MovieDetailsResponse: Decodable {
@@ -23,5 +22,14 @@ struct MovieDetailsResponse: Decodable {
     
     struct Country: Decodable {
         let name: String
+    }
+}
+
+struct VideosResponse: Decodable {
+    let results: [Video]
+    struct Video: Decodable {
+        let key: String
+        let site: String
+        let type: String
     }
 }

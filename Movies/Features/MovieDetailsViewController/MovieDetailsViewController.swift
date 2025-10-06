@@ -1,16 +1,17 @@
 import UIKit
 import Kingfisher
+import SafariServices
 
 class MovieDetailsViewController: UIViewController {
     static let identifier = "MovieDetailsViewController"
     
-    @IBOutlet weak var posterImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var metaLabel: UILabel!
-    @IBOutlet weak var genresLabel: UILabel!
-    @IBOutlet weak var trailerButton: UIButton!
-    @IBOutlet weak var ratingLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var posterImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var metaLabel: UILabel!
+    @IBOutlet private weak var genresLabel: UILabel!
+    @IBOutlet private weak var trailerButton: UIButton!
+    @IBOutlet private weak var ratingLabel: UILabel!
+    @IBOutlet private weak var descriptionLabel: UILabel!
     
     var viewModel: MovieDetailsViewModel!
     
@@ -30,28 +31,35 @@ class MovieDetailsViewController: UIViewController {
         viewModel.loadMovieDetails()
     }
     
+    func setMovieID(_ movieID: Int) {
+        viewModel.movieId = movieID
+    }
+    
     private func setupUI() {
+        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
+        trailerButton.setImage(UIImage(systemName: "play.rectangle.fill", withConfiguration: config), for: .normal)
+        trailerButton.tintColor = .label
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapPoster))
         posterImageView.isUserInteractionEnabled = true
         posterImageView.addGestureRecognizer(tap)
     }
     
-    func setMovieID(_ movieID: Int) {
-        viewModel.movieId = movieID
-    }
-    
     private func bindViewModel() {
         viewModel.onDataLoaded = { [weak self] in
-            self?.showMovieInfo()
+            DispatchQueue.main.async {
+                self?.showMovieInfo()
+            }
         }
     }
-    
-    func showMovieInfo() {
-        // TODO: refactor
+
+    private func showMovieInfo() {
         titleLabel.text = viewModel.movie?.title
-        metaLabel.text = (viewModel.movie?.country ?? "") + ", " + (viewModel.movie?.year ?? "")
+        metaLabel.text = viewModel.movie?.meta
+        metaLabel.isHidden = viewModel.movie?.meta == nil
         genresLabel.text = viewModel.movie?.genres
-        ratingLabel.text = "Rating: " + (viewModel.movie?.rating ?? "0.0")
+        genresLabel.isHidden = viewModel.movie?.genres == nil
+        ratingLabel.text = viewModel.movie?.rating
         descriptionLabel.text = viewModel.movie?.overview
         
         if let url = viewModel.movie?.posterURL {
@@ -64,7 +72,13 @@ class MovieDetailsViewController: UIViewController {
         }
         trailerButton.isHidden = !viewModel.isTrailerAvailable
     }
-
+    
+    @IBAction private func trailerButtonTapped(_ sender: Any) {
+        guard let url = viewModel.movie?.trailerURL else { return }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
+    }
+    
     @objc private func didTapPoster() {
         guard let image = posterImageView.image else { return }
         let vc = PosterViewController()

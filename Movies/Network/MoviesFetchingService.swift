@@ -2,6 +2,7 @@ import Foundation
 import Alamofire
 
 protocol MoviesFetchingServiceProtocol {
+    func fetchTrailerURL(id: Int, completion: @escaping (URL?) -> Void)
     func fetchMovieDetails(id: Int, completion: @escaping (Result<MovieDetailsResponse, Error>) -> Void)
     func fetchMovies(page: Int, sortBy: MoviesSortOption, completion: @escaping (Result<MovieResponse, Error>) -> Void)
     func searchMovies(query: String, page: Int, completion: @escaping (Result<MovieResponse, Error>) -> Void)
@@ -99,6 +100,30 @@ final class MoviesFetchingService: MoviesFetchingServiceProtocol {
                     completion(.success(movieResponse))
                 case .failure(let error):
                     completion(.failure(error))
+                }
+            }
+    }
+    
+    func fetchTrailerURL(id: Int, completion: @escaping (URL?) -> Void) {
+        let url = APIConstants.movieURL + "\(id)/videos"
+        let parameters: [String: Any] = [
+            "api_key": apiKey,
+            "language": "en-US"
+        ]
+        
+        AF.request(url, parameters: parameters)
+            .validate()
+            .responseDecodable(of: VideosResponse.self) { response in
+                switch response.result {
+                case .success(let videosResponse):
+                    if let trailer = videosResponse.results.first(where: { $0.type == "Trailer" && $0.site == "YouTube" }) {
+                        let trailerURL = URL(string: APIConstants.trailerURLBase + trailer.key)
+                        completion(trailerURL)
+                    } else {
+                        completion(nil)
+                    }
+                case .failure:
+                    completion(nil)
                 }
             }
     }
