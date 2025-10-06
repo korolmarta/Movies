@@ -30,6 +30,7 @@ final class MoviesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        handleInternetConnection()
         setupUI()
         setupTableView()
         setupRefreshControl()
@@ -83,11 +84,31 @@ final class MoviesListViewController: UIViewController {
         }
     }
     
+    private func handleInternetConnection() {
+        NetworkMonitor.shared.startMonitoring()
+        NetworkMonitor.shared.onStatusChange = { [weak self] isConnected in
+            guard let self = self else { return }
+            if !isConnected {
+                self.showOfflineAlert()
+            }
+        }
+    }
+    
     private func showMovieDetails(for movie: Movie) {
         let detailsVC = DependencyContainer.shared.container.forceResolve(MovieDetailsViewController.self)
         detailsVC.setMoviePreviewInfo(movie)
         navigationItem.backButtonTitle = ""
         navigationController?.pushViewController(detailsVC, animated: true)
+    }
+    
+    private func showOfflineAlert() {
+        let alert = UIAlertController(
+            title: "No Internet Connection",
+            message: "You are offline. Please, enable your Wi-Fi or connect using cellular data.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     @objc private func refreshData() {
