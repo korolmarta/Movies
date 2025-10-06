@@ -85,7 +85,7 @@ final class MoviesListViewController: UIViewController {
     
     private func showMovieDetails(for movie: Movie) {
         let detailsVC = DependencyContainer.shared.container.forceResolve(MovieDetailsViewController.self)
-        detailsVC.setMovieID(movie.id)
+        detailsVC.setMoviePreviewInfo(movie)
         navigationItem.backButtonTitle = ""
         navigationController?.pushViewController(detailsVC, animated: true)
     }

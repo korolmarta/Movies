@@ -31,8 +31,9 @@ class MovieDetailsViewController: UIViewController {
         viewModel.loadMovieDetails()
     }
     
-    func setMovieID(_ movieID: Int) {
-        viewModel.movieId = movieID
+    func setMoviePreviewInfo(_ movie: Movie) {
+        title = movie.title
+        viewModel.movieId = movie.id
     }
     
     private func setupUI() {
