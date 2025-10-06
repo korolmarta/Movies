@@ -52,6 +52,14 @@ class MovieDetailsViewController: UIViewController {
                 self?.showMovieInfo()
             }
         }
+        
+        viewModel.onErrorOccurred = { [weak self] message in
+            DispatchQueue.main.async {
+                self?.showErrorAlert(message: message) {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
     }
 
     private func showMovieInfo() {

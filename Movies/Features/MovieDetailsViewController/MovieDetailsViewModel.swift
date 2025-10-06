@@ -6,7 +6,8 @@ final class MovieDetailsViewModel {
     private(set) var movie: MovieDetails?
     
     var movieId: Int = 0
-    var onDataLoaded: (() -> Void)?
+    var onDataLoaded: (() -> ())?
+    var onErrorOccurred: ((String) -> ())?
     
     var isTrailerAvailable: Bool {
         guard let movie else { return false }
@@ -50,8 +51,8 @@ final class MovieDetailsViewModel {
                     self.onDataLoaded?()
                 }
             case .failure(let error):
-                // TODO: Display error alert
                 print("❌ Searching movies error:", error)
+                self.onErrorOccurred?(error.localizedDescription)
             }
         }
     }

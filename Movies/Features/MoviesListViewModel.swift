@@ -22,6 +22,7 @@ final class MoviesListViewModel {
         movies.count
     }
     
+    var onErrorOccurred: ((String) -> ())?
     var onMoviesUpdated: (() -> ())?
     var reloadSections: (() -> ())?
     
@@ -42,7 +43,6 @@ final class MoviesListViewModel {
             case .success(let genresMap):
                 self?.genresMap = genresMap
             case .failure(let error):
-                // TODO: Display error alert
                 print("❌ Fetching genres error:", error.localizedDescription)
             }
         }
@@ -60,8 +60,9 @@ final class MoviesListViewModel {
                 self?.onMoviesUpdated?()
                 self?.isLoading = false
             case .failure(let error):
-                // TODO: Display error alert
                 print("❌ Fetching movies error:", error.localizedDescription)
+                self?.isLoading = false
+                self?.onErrorOccurred?(error.localizedDescription)
             }
         }
     }
@@ -77,8 +78,9 @@ final class MoviesListViewModel {
                 self?.onMoviesUpdated?()
                 self?.isLoading = false
             case .failure(let error):
-                // TODO: Display error alert
                 print("❌ Searching movies error:", error)
+                self?.isLoading = false
+                self?.onErrorOccurred?(error.localizedDescription)
             }
         }
     }
