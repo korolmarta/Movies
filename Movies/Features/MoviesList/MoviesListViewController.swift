@@ -72,6 +72,12 @@ final class MoviesListViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        viewModel.onErrorOccurred = { [weak self] message in
+            DispatchQueue.main.async {
+                self?.showErrorAlert(message: message)
+            }
+        }
+        
         viewModel.onMoviesUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
