@@ -82,6 +82,7 @@ final class MoviesListViewController: UIViewController {
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
                 self?.refreshControl.endRefreshing()
+                self?.updateEmptyState()
             }
         }
         
@@ -97,6 +98,14 @@ final class MoviesListViewController: UIViewController {
             if !isConnected {
                 self.showOfflineAlert()
             }
+        }
+    }
+    
+    private func updateEmptyState() {
+        if viewModel.movies.isEmpty {
+            tableView.backgroundView = EmptyStateView(message: "Немає результатів🔎", systemImageName: "film")
+        } else {
+            tableView.backgroundView = nil
         }
     }
     
